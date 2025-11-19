@@ -1,0 +1,694 @@
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.nav {
+    height: 40px;
+    background: #333;
+    box-shadow: 0 1px 2px #666;
+    display: flex;
+    align-items: center;
+}
+
+.btli {
+    float: left;
+    width: 100px;
+    line-height: 40px;
+    text-align: center;
+    position: relative;
+}
+
+.navlist a {
+    color: #fff;
+    display: block;
+}
+
+.navlist a:hover {
+    background: #666;
+}
+
+.droplist {
+    background: #333;
+    box-shadow: 0 1px 2px #333;
+    display: none;
+    border-radius: 6px;
+    overflow: hidden;
+    position: absolute;
+
+
+}
+
+.btli:hover .droplist {
+    display: block;
+}
+
+.droplist li {
+    border-top: 1px solid #666;
+}
+
+.droplist li a {
+    padding: 0 10px;
+    display: block;
+}
+
+.main-container {
+    display: flex;
+    flex: 1;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.sidebar {
+    width: 220px;
+    background: #f5f5f5;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px #ddd;
+    padding: 15px;
+    margin-right: 15px;
+    position: sticky;
+    top: 50px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+}
+
+.sidebar h3 {
+    padding: 10px;
+    background: #333;
+    color: #fff;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.component-list {
+    margin-bottom: 20px;
+}
+
+.component-list h4 {
+    padding: 8px 10px;
+    background: #eee;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.component-list ul {
+    padding-left: 20px;
+}
+
+.component-list li {
+    padding: 8px 0;
+    cursor: pointer;
+    border: 1px dashed #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 5px;
+    background: #fff;
+}
+
+.component-list li:hover {
+    background: #f0f0f0;
+}
+
+.canvas-container {
+    flex: 1;
+    border: 2px dashed #ccc;
+    border-radius: 6px;
+    position: relative;
+    overflow: auto;
+    min-height: 600px;
+}
+
+.canvas {
+    width: 100%;
+    min-height: 100%;
+    position: relative;
+    background-image: linear-gradient(#e0e0e0 1px, transparent 1px),
+        linear-gradient(90deg, #e0e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+#wire-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.toolbar {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    padding: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+}
+
+.toolbar button {
+    padding: 5px 10px;
+    margin: 2px;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.toolbar button.active {
+    background: #4CAF50;
+    color: white;
+    border-color: #45a049;
+}
+
+.selector-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    background: #4CAF50;
+    z-index: 1000;
+    display: none;
+}
+
+.component {
+    position: absolute;
+    cursor: move;
+    z-index: 10;
+}
+
+.component-svg {
+    display: block;
+    width: 120px;
+    height: 160px;
+}
+
+.anchor {
+    cursor: pointer;
+    stroke: red;
+    stroke-width: 1;
+}
+
+.wire {
+    stroke: #000;
+    stroke-width: 2;
+    fill: none;
+    cursor: pointer;
+    pointer-events: stroke;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+.wire:hover {
+    stroke: #0066cc;
+    stroke-width: 3;
+}
+
+/* 状态样式 */
+.state-0 {
+    fill: #ff0000;
+}
+
+.state-1 {
+    fill: #00ff00;
+}
+
+/* 时钟信号样式 */
+.clock-state {
+    fill: #FF6B35;
+}
+
+.clock-active {
+    fill: #FF4500;
+}
+
+/* 快捷栏样式 */
+.toolbar-container {
+    height: 45px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.quick-toolbar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.toolbar-item {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    position: relative;
+    border-radius: 4px;
+}
+
+.toolbar-item:hover {
+    background: rgba(33, 150, 243, 0.1);
+    transform: scale(1.1);
+}
+
+.toolbar-item.active {
+    background: rgba(33, 150, 243, 0.2);
+    transform: scale(1.05);
+}
+
+.toolbar-item.active svg {
+    filter: drop-shadow(0 1px 2px rgba(33, 150, 243, 0.3));
+}
+
+.toolbar-item svg {
+    width: 24px;
+    height: 24px;
+}
+
+.toolbar-separator {
+    width: 1px;
+    height: 24px;
+    background: #dee2e6;
+    margin: 0 12px;
+}
+
+.toolbar-item .tooltip {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 1001;
+}
+
+.toolbar-item:hover .tooltip {
+    opacity: 1;
+}
+
+/* 右键菜单样式 */
+.context-menu {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    padding: 5px 0;
+    z-index: 1000;
+    display: none;
+}
+
+.context-menu-item {
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.context-menu-item:hover {
+    background: #f0f0f0;
+}
+
+.context-menu-item.danger {
+    color: #d32f2f;
+}
+
+.context-menu-item.danger:hover {
+    background: #ffebee;
+}
+
+/* 选中状态样式 - 由JavaScript处理，避免冲突 */
+
+.wire.selected {
+    stroke: #2196F3 !important;
+    stroke-width: 4 !important;
+}
+
+/* 时钟输入锚点样式 */
+.clock-input {
+    fill: #0066cc !important;
+}
+
+.clock-input:hover {
+    fill: #004499 !important;
+}
+
+/* 文字元素样式 */
+.text-element {
+    outline: none;
+    user-select: text;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.text-element:hover:not(:focus) {
+    border-color: #2196F3 !important;
+    background: rgba(33, 150, 243, 0.05);
+}
+
+.text-element.selected:not(:focus) {
+    border-color: #2196F3 !important;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+    background: rgba(33, 150, 243, 0.1);
+}
+
+.text-element:focus {
+    border-color: #2196F3 !important;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.3);
+    background: white;
+}
+
+/* 手势模式样式 */
+.canvas.connect-mode {
+    background-color: rgba(255, 152, 0, 0.02);
+}
+
+.canvas.connect-mode .component {
+    /* 在连线模式下，组件本体不可拖拽，但锚点仍可交互 */
+    user-select: none;
+}
+
+.canvas.connect-mode .anchor {
+    pointer-events: auto;
+    cursor: crosshair;
+}
+
+.canvas.connect-mode .anchor:hover {
+    /* 移除橙色高亮效果，保持原始样式 */
+    fill: black !important;
+    stroke: red !important;
+    stroke-width: 1;
+    r: 4;
+}
+
+
+
+/* Context Submenu Styles */
+.context-menu-item .context-submenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: -5px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 5px;
+    z-index: 101;
+}
+
+.context-menu-item:hover .context-submenu {
+    display: block;
+}
+
+.context-submenu-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.context-submenu-item:hover {
+    background-color: #f0f0f0;
+}
+
+.context-submenu-item.active {
+    background-color: #e0e0e0;
+    font-weight: bold;
+}
+
+/* 线路组件专用样式 */
+
+/* 引脚组件样式 */
+#pin-group {
+    transition: all 0.3s ease;
+}
+
+#pin-group rect {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+#pin-group:hover rect {
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+
+/* 分线器样式 */
+#splitter-group {
+    transition: all 0.3s ease;
+}
+
+#splitter-group rect {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+#splitter-group:hover rect {
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+
+/* 探针样式 */
+#probe-group {
+    transition: all 0.3s ease;
+}
+
+#probe-group rect {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+#probe-group:hover rect {
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+
+#probe-value {
+    font-weight: bold;
+    transition: fill 0.3s ease;
+}
+
+#probe-label {
+    font-weight: bold;
+    fill: #333;
+}
+
+/* 电源和接地组件样式 */
+#power-group rect {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    transition: all 0.3s ease;
+}
+
+#power-group:hover rect {
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+    fill: #FF1744;
+}
+
+#ground-group rect {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    transition: all 0.3s ease;
+}
+
+#ground-group:hover rect {
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+    fill: #6A1B9A;
+}
+
+/* 特殊锚点样式 */
+.pin-anchor {
+    fill: #FFD700;
+    transition: all 0.3s ease;
+}
+
+.pin-anchor:hover {
+    fill: #FFA000;
+    transform: scale(1.2);
+}
+
+/* 配置对话框样式 */
+.config-dialog {
+    font-family: Arial, sans-serif;
+}
+
+.config-dialog-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    min-width: 300px;
+}
+
+/* 模N计数器配置对话框样式 */
+.component-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.component-dialog .dialog-content {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    max-width: 90%;
+    max-height: 90%;
+    overflow-y: auto;
+}
+
+.component-dialog .dialog-header {
+    background: #f5f5f5;
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.component-dialog .dialog-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.component-dialog .dialog-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.component-dialog .dialog-close:hover {
+    color: #666;
+}
+
+.component-dialog .dialog-body {
+    padding: 20px;
+}
+
+.component-dialog .config-group {
+    margin-bottom: 15px;
+}
+
+.component-dialog .config-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.component-dialog .config-group input {
+    width: 100px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.config-dialog h3 {
+    margin: 0 0 20px 0;
+    color: #333;
+    text-align: center;
+    border-bottom: 2px solid #2196F3;
+    padding-bottom: 10px;
+}
+
+.config-group {
+    margin-bottom: 15px;
+}
+
+.config-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.config-group select,
+.config-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.config-group select:focus,
+.config-group input:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+.config-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.config-buttons button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.config-buttons button:first-child {
+    background: #2196F3;
+    color: white;
+}
+
+.config-buttons button:first-child:hover {
+    background: #1976D2;
+}
+
+.config-buttons button:last-child {
+    background: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.config-buttons button:last-child:hover {
+    background: #e0e0e0;
+}
