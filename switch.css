@@ -1,0 +1,117 @@
+/**
+ * 开关 (Switch) 元件样式 - 跷跷板样式
+ */
+
+/* 开关元件基础样式 */
+.component[data-type="switch"] {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* 开关轨道过渡效果 */
+#switch-track {
+    transition: fill 0.3s ease;
+}
+
+/* 开关滑块 (thumb) 过渡效果 */
+#switch-thumb {
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                cx 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                fill 0.2s ease;
+    stroke: rgba(0,0,0,0.2);
+    stroke-width: 1;
+}
+
+/* 状态指示文字过渡效果 */
+#switch-status {
+    transition: fill 0.3s ease;
+}
+
+/* 开关底座样式 */
+#switch-base {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+/* 状态 0 (关闭) */
+.switch-state-0 #switch-track {
+    fill: #B0BEC5; /* 关闭时的轨道颜色 (灰色) */
+}
+
+.switch-state-0 #switch-thumb {
+    cx: -18px;
+    fill: #FAFAFA; /* 关闭时的滑块颜色 (浅灰色) */
+}
+
+/* 状态 1 (打开) */
+.switch-state-1 #switch-track {
+    fill: #4CAF50; /* 打开时的轨道颜色 (绿色) */
+}
+
+.switch-state-1 #switch-thumb {
+    cx: 18px;
+    fill: #FFFFFF; /* 打开时的滑块颜色 (白色) */
+}
+
+/* 开关悬停效果 */
+.component[data-type="switch"]:hover #switch-thumb {
+    filter: brightness(0.95);
+    transform: scale(1.05);
+}
+
+.component[data-type="switch"]:hover #switch-track {
+    filter: brightness(1.05);
+}
+
+/* 开关激活（点击）效果 */
+.component[data-type="switch"]:active #switch-thumb {
+    transform: scale(0.95);
+}
+
+/* 开关文字样式 */
+#switch-text {
+    pointer-events: none; /* 防止文字干扰点击事件 */
+}
+
+#switch-status {
+    pointer-events: none; /* 防止文字干扰点击事件 */
+    font-weight: bold;
+}
+
+/* 开关组合样式 */
+#switch-group {
+    transition: transform 0.1s ease;
+}
+
+.component[data-type="switch"]:active #switch-group {
+    transform: translate(50px, 30px) scale(0.98);
+}
+
+/* 开关选中状态 */
+.component[data-type="switch"].selected {
+    outline: 2px solid #2196F3;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* 开关禁用状态（如果需要） */
+.component[data-type="switch"].disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.component[data-type="switch"].disabled #switch-thumb,
+.component[data-type="switch"].disabled #switch-track {
+    transition: none;
+}
+
+/* 开关动画关键帧 */
+@keyframes switch-toggle {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* 开关切换时的动画效果 */
+.switch-toggling #switch-thumb {
+    animation: switch-toggle 0.2s ease-in-out;
+}
